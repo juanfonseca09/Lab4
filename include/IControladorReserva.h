@@ -2,7 +2,7 @@
 #define ICONTROLADOR_RESERVA_H
 
 class IControladorReserva() {
-  public:
+public:
   virtual void listarPasajeros() = 0;
   virtual void consultarViajes() = 0;
   virtual void generarReserva() = 0;
