@@ -5,6 +5,8 @@
 
 class ControladorReserva : public IControladorReserva {
 public:
+  static ControladorReserva* getInstance();
+  
   void listarPasajeros();
   void consultarViajes();
   void generarReserva();

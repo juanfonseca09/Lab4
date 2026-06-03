@@ -15,3 +15,15 @@ Fabrica* Fabrica::getInstance() {
 IControladorFechaActual* Fabrica::getIControladorFechaActual() {
     return ControladorFechaActual::getInstance();
 }
+
+IControladorCalificacion* Fabrica::getIControladorCalificacion() {
+    return ControladorCalificacion::getInstance();
+}
+
+IControladorReserva* Fabrica::getIControladorReserva() {
+    return ControladorReserva::getInstance();
+}
+
+IControladorUsuario* Fabrica::getIControladorUsuario() {
+    return ControladorUsuario::getInstance();
+}

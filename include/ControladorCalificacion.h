@@ -5,6 +5,8 @@
 
 class ControladorCalificacion : public IControladorCalificacion {
 public:
+  static ControladorCalificacion* getInstance();
+  
   void listarUsuarios();
   void listarViajes();
   void listarUsuariosViaje();

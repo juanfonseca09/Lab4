@@ -5,6 +5,8 @@
 
 class ControladorUsuario : public IControladorUsuario {
 public:
+  static ControladorUsuario* getInstance();
+  
   void altaPasajero();
   void altaConductor();
   void registrarVehiculo();
