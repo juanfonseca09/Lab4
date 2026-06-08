@@ -13,14 +13,14 @@ public:
     DTFecha();
     DTFecha(int dia, int mes, int anio);
 
-    int getDia();
-    int getMes();
-    int getAnio();
+    int getDia() const;
+    int getMes() const;
+    int getAnio() const;
 
-    bool operator==(DTFecha other);
-
+    bool operator==(const DTFecha& other) const;
+    bool operator<(const DTFecha& other) const;
 };
 
-std::ostream& operator<<(std::ostream& os, DTFecha f);
+std::ostream& operator<<(std::ostream& os, const DTFecha& f);
 
 #endif

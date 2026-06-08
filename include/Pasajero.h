@@ -9,8 +9,10 @@ private:
     std::string ci;
 
 public:
-    Pasajero(std::string nickname, std::string nombre, std::string contrasena, std::string email, std::string documento);
-    ~Pasajero();
+    Pasajero(std::string nickname, std::string nombre, std::string contrasena, std::string email, std::string ci);
+    virtual ~Pasajero();
+
+    std::string getCI() const;
 };
 
 #endif

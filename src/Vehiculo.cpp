@@ -8,4 +8,25 @@ Vehiculo::Vehiculo(std::string matricula, int capacidad, std::string marca, std:
     this->tipo = tipo;
 }
 
-Vehiculo::~Vehiculo() {}
+Vehiculo::~Vehiculo() {
+}
+
+std::string Vehiculo::getMatricula() const {
+    return matricula;
+}
+
+int Vehiculo::getCapacidad() const {
+    return capacidad;
+}
+
+std::string Vehiculo::getMarca() const {
+    return marca;
+}
+
+std::string Vehiculo::getModelo() const {
+    return modelo;
+}
+
+TipoVehiculo Vehiculo::getTipo() const {
+    return tipo;
+}

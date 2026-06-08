@@ -7,4 +7,21 @@ Usuario::Usuario(std::string nickname, std::string nombre, std::string contrasen
     this->email = email;
 }
 
-Usuario::~Usuario() {}
+Usuario::~Usuario() {
+}
+
+std::string Usuario::getNickname() const {
+    return nickname;
+}
+
+std::string Usuario::getNombre() const {
+    return nombre;
+}
+
+std::string Usuario::getContrasena() const {
+    return contrasena;
+}
+
+std::string Usuario::getEmail() const {
+    return email;
+}
