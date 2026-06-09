@@ -1,13 +1,19 @@
 #ifndef MANEJADOR_CALIFICACION_H
 #define MANEJADOR_CALIFICACION_H
 
-#include "Calificacion.h"
+#include <vector>
 
-class ManejadorCalificacion() {
+class Calificacion;
+
+class ManejadorCalificacion {
 private:
-  std::set<Calificacion>;
+    static ManejadorCalificacion* instancia;
+    std::vector<Calificacion*> calificaciones;
+    ManejadorCalificacion();
 public:
-  void agregarCalificacion(Calificacion* c);
+    static ManejadorCalificacion* getInstance();
+    void agregarCalificacion(Calificacion* c);
+    std::vector<Calificacion*> getCalificaciones();
 };
 
 #endif

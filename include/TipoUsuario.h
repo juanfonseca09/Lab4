@@ -2,8 +2,8 @@
 #define TIPO_USUARIO_H
 
 enum TipoUsuario {
-    Conductor,
-    Pasajero
+    UsuarioConductor,
+    UsuarioPasajero
 };
-
+// lo cambie pq me tiraba error con la clase conductor y pasajero
 #endif

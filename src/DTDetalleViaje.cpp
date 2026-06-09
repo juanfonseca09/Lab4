@@ -1,15 +1,7 @@
 #include "../include/DTDetalleViaje.h"
 
-DTDetalleViaje::DTDetalleViaje(
-    int codigo,
-    DTFecha fecha,
-    std::string origen,
-    std::string destino,
-    int asientosPublicados,
-    float precio,
-    DTDetalleVehiculo vehi,
-    std::vector<DTDetalleReserva> res
-) : vehiculo(vehi), reservas(res)
+DTDetalleViaje::DTDetalleViaje(int codigo, DTFecha fecha, std::string origen, std::string destino, int asientosPublicados,float precio, DTDetalleVehiculo vehi,std::vector<DTDetalleReserva> res) 
+: vehiculo(vehi), reservas(res)
 {
     this->codigo = codigo;
     this->fecha = fecha;

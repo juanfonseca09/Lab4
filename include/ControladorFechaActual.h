@@ -7,12 +7,9 @@ class ControladorFechaActual : public IControladorFechaActual {
 private:
     static ControladorFechaActual* instancia;
     DTFecha fechaActual;
-
     ControladorFechaActual();
-
 public:
     static ControladorFechaActual* getInstance();
-
     DTFecha getFecha();
     void setFecha(DTFecha nuevaFecha);
 };

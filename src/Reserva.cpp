@@ -2,20 +2,15 @@
 #include "../include/Pasajero.h"
 #include "../include/Calificacion.h"
 
-Reserva::Reserva(int asientosReservados, DTFecha fecha) {
-    this->asientosReservados = asientosReservados;
-    this->fecha = fecha;
-    this->pasajero = NULL;
-}
-
-Reserva::Reserva(int asientosReservados, DTFecha fecha, Pasajero* pasajero) {
+Reserva::Reserva(int asientosReservados, DTFecha fecha, Pasajero* pasajero, Viaje* viaje) {
     this->asientosReservados = asientosReservados;
     this->fecha = fecha;
     this->pasajero = pasajero;
+    this->viaje = viaje;
 }
 
 Reserva::~Reserva() {
-    for (unsigned int i = 0; i < calificaciones.size(); i++) {
+    for (unsigned  i = 0; i < calificaciones.size(); i++) {
         delete calificaciones[i];
     }
 }
@@ -36,7 +31,6 @@ bool Reserva::perteneceAPasajero(std::string nickname) const {
     if (pasajero == NULL) {
         return false;
     }
-
     return pasajero->getNickname() == nickname;
 }
 
@@ -51,21 +45,22 @@ std::vector<Calificacion*> Reserva::getCalificaciones() const {
 }
 
 bool Reserva::tieneCalificacionDePara(std::string nicknameEvaluador, std::string nicknameEvaluado) const {
-    for (unsigned int i = 0; i < calificaciones.size(); i++) {
+    for (unsigned  i = 0; i < calificaciones.size(); i++) {
         if (calificaciones[i]->esDePara(nicknameEvaluador, nicknameEvaluado)) {
             return true;
         }
     }
-
     return false;
 }
 
 DTDetalleReserva Reserva::getDetalle() const {
     std::string nicknamePasajero = "";
-
     if (pasajero != NULL) {
         nicknamePasajero = pasajero->getNickname();
     }
-
     return DTDetalleReserva(asientosReservados, fecha, nicknamePasajero);
+}
+
+Viaje* Reserva::getViaje() const {
+    return viaje;
 }

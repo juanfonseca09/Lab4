@@ -1,4 +1,7 @@
 #include "../include/Fabrica.h"
+#include "../include/ControladorCalificacion.h"
+#include "../include/ControladorReserva.h"
+#include "../include/ControladorUsuario.h"
 #include "../include/ControladorFechaActual.h"
 
 Fabrica* Fabrica::instancia = NULL;

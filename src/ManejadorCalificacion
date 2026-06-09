@@ -1,0 +1,20 @@
+#include "../include/ManejadorCalificacion.h"
+
+ManejadorCalificacion* ManejadorCalificacion::instancia = NULL;
+
+ManejadorCalificacion::ManejadorCalificacion() {
+}
+
+ManejadorCalificacion* ManejadorCalificacion::getInstance() {
+    if (instancia == NULL)
+        instancia = new ManejadorCalificacion();
+    return instancia;
+}
+
+void ManejadorCalificacion::agregarCalificacion(Calificacion* c) {
+    calificaciones.push_back(c);
+}
+
+std::vector<Calificacion*> ManejadorCalificacion::getCalificaciones() {
+    return calificaciones;
+}

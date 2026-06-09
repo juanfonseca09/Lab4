@@ -1,13 +1,19 @@
 #ifndef MANEJADOR_RESERVA_H
 #define MANEJADOR_RESERVA_H
 
-#include "Reserva.h"
+#include <vector>
 
-class ManejadorReserva() {
+class Reserva;
+
+class ManejadorReserva {
 private:
-  std::set<Reserva*>;
+    static ManejadorReserva* instancia;
+    std::vector<Reserva*> reservas;
+    ManejadorReserva();
 public:
-  void agregarReserva(Reserva* r)
+    static ManejadorReserva* getInstance();
+    void agregarReserva(Reserva* r);
+    std::vector<Reserva*> getReservas();
 };
 
 #endif

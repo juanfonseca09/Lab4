@@ -1,13 +1,22 @@
 #ifndef MANEJADOR_USUARIO_H
 #define MANEJADOR_USUARIO_H
 
-#include "Usuario.h"
+#include <map>
+#include <string>
 
-class ManejadorUsuario() {
+class Usuario;
+
+class ManejadorUsuario {
 private:
-  std::set<Usuario>;
+    static ManejadorUsuario* instancia;
+    std::map<std::string, Usuario*> usuarios;
+    ManejadorUsuario();
 public:
-  void agregarUsuario(Usuario* u);
+    static ManejadorUsuario* getInstance();
+    void agregarUsuario(Usuario* u);
+    Usuario* find(std::string nickname);
+    bool existeUsuario(std::string nickname);
+    std::map<std::string, Usuario*> getUsuarios();
 };
 
 #endif

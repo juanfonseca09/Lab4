@@ -1,16 +1,27 @@
 #ifndef CONTROLADOR_CALIFICACION_H
 #define CONTROLADOR_CALIFICACION_H
 
+#include <string>
+#include <vector>
+
 #include "IControladorCalificacion.h"
+#include "DTUsuario.h"
+#include "DTListarViaje.h"
+#include "DTUsuarioViaje.h"
 
 class ControladorCalificacion : public IControladorCalificacion {
+private:
+    static ControladorCalificacion* instancia;
+    // guardamos el nickname del usuario y codigo de viaje seleccionados en pasos anteriores del caso de uso
+    std::string nicknameRecordado;
+    int codigoRecordado;
+    ControladorCalificacion();
 public:
-  static ControladorCalificacion* getInstance();
-  
-  void listarUsuarios();
-  void listarViajes();
-  void listarUsuariosViaje();
-  void calificarUsuario();
+    static ControladorCalificacion* getInstance();
+    std::vector<DTUsuario> listarUsuarios();
+    std::vector<DTListarViaje> listarViajes(std::string nickname);
+    std::vector<DTUsuarioViaje> listarUsuariosViaje(int codigo);
+    bool calificarUsuario(std::string nicknameCalificado, int puntaje);
 };
 
 #endif
