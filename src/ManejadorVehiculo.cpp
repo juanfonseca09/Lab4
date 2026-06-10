@@ -6,6 +6,15 @@ ManejadorVehiculo* ManejadorVehiculo::instancia = NULL;
 ManejadorVehiculo::ManejadorVehiculo() {
 }
 
+ManejadorVehiculo::~ManejadorVehiculo() {
+    while (!vehiculos.end())
+    {
+        Vehiculo* a_borrar = vehiculos.end()->second();
+        vehiculos.erase(vehiculos.end());
+        delete a_borrar;
+    }
+}
+
 ManejadorVehiculo* ManejadorVehiculo::getInstance() {
     if (instancia == NULL)
         instancia = new ManejadorVehiculo();

@@ -5,6 +5,15 @@ ManejadorReserva* ManejadorReserva::instancia = 0;
 ManejadorReserva::ManejadorReserva() {
 }
 
+ManejadorReserva::~ManejadorReserva() {
+    while (!reservas.empty())
+    {
+        Reserva* a_borrar = *(reservas.end());
+        reservas.pop_back();
+        delete a_borrar;
+    }
+}
+
 ManejadorReserva* ManejadorReserva::getInstance() {
     if (instancia == 0)
         instancia = new ManejadorReserva();

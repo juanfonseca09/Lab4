@@ -5,6 +5,15 @@ ManejadorCalificacion* ManejadorCalificacion::instancia = NULL;
 ManejadorCalificacion::ManejadorCalificacion() {
 }
 
+ManejadorCalificacion::~ManejadorCalificacion() {
+    while (!calificaciones.empty())
+    {
+        Calificacion* a_borrar = *(calificaciones.end());
+        calificaciones.pop_back();
+        delete a_borrar;
+    }
+}
+
 ManejadorCalificacion* ManejadorCalificacion::getInstance() {
     if (instancia == NULL)
         instancia = new ManejadorCalificacion();
