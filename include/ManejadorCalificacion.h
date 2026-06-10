@@ -11,6 +11,7 @@ private:
     std::vector<Calificacion*> calificaciones;
     ManejadorCalificacion();
 public:
+    ~ManejadorCalificacion();
     static ManejadorCalificacion* getInstance();
     void agregarCalificacion(Calificacion* c);
     std::vector<Calificacion*> getCalificaciones();

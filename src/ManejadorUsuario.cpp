@@ -6,6 +6,15 @@ ManejadorUsuario* ManejadorUsuario::instancia = NULL;
 ManejadorUsuario::ManejadorUsuario() {
 }
 
+ManejadorUsuario::~ManejadorUsuario() {
+    while (!usuarios.empty())
+    {
+        Usuario* a_borrar = usuarios.end()->second();
+        usuarios.erase(usuarios.end());
+        delete a_borrar;
+    }
+}
+
 ManejadorUsuario* ManejadorUsuario::getInstance() {
     if (instancia == NULL)
         instancia = new ManejadorUsuario();

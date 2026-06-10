@@ -11,6 +11,7 @@ private:
     std::vector<Reserva*> reservas;
     ManejadorReserva();
 public:
+    ~ManejadorReserva();
     static ManejadorReserva* getInstance();
     void agregarReserva(Reserva* r);
     std::vector<Reserva*> getReservas();

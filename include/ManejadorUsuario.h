@@ -12,6 +12,7 @@ private:
     std::map<std::string, Usuario*> usuarios;
     ManejadorUsuario();
 public:
+    ~ManejadorUsuario();
     static ManejadorUsuario* getInstance();
     void agregarUsuario(Usuario* u);
     Usuario* find(std::string nickname);

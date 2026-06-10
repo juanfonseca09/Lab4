@@ -12,6 +12,7 @@ private:
     int ultimoCodigo;
     ManejadorViaje();
 public:
+    ~ManejadorViaje();
     static ManejadorViaje* getInstance();
     void agregarViaje(Viaje* v);
     Viaje* find(int codigo);

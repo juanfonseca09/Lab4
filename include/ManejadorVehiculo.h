@@ -12,6 +12,7 @@ private:
     std::map<std::string, Vehiculo*> vehiculos;
     ManejadorVehiculo();
 public:
+    ~ManejadorVehiculo();
     static ManejadorVehiculo* getInstance();
     void agregarVehiculo(Vehiculo* v);
     Vehiculo* find(std::string matricula);

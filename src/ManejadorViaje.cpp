@@ -7,6 +7,15 @@ ManejadorViaje::ManejadorViaje() {
     ultimoCodigo = 0;
 }
 
+ManejadorViaje::~ManejadorViaje() {
+    while (!viajes.empty())
+    {
+        Viaje* a_borrar = viajes.end()->second();
+        viajes.erase(viajes.end());
+        delete a_borrar;
+    }
+}
+
 ManejadorViaje* ManejadorViaje::getInstance() {
     if (instancia == NULL)
         instancia = new ManejadorViaje();
