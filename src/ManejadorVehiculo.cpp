@@ -7,10 +7,12 @@ ManejadorVehiculo::ManejadorVehiculo() {
 }
 
 ManejadorVehiculo::~ManejadorVehiculo() {
-    while (!vehiculos.end())
+    while (!vehiculos.empty())
     {
-        Vehiculo* a_borrar = vehiculos.end()->second();
-        vehiculos.erase(vehiculos.end());
+        std::map<std::string, Vehiculo*>::iterator it = vehiculos.end();
+        --it;
+        Vehiculo* a_borrar = it->second;
+        vehiculos.erase(it);
         delete a_borrar;
     }
 }

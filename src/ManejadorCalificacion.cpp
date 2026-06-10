@@ -1,4 +1,5 @@
 #include "../include/ManejadorCalificacion.h"
+#include "../include/Calificacion.h"
 
 ManejadorCalificacion* ManejadorCalificacion::instancia = NULL;
 
@@ -8,7 +9,7 @@ ManejadorCalificacion::ManejadorCalificacion() {
 ManejadorCalificacion::~ManejadorCalificacion() {
     while (!calificaciones.empty())
     {
-        Calificacion* a_borrar = *(calificaciones.end());
+        Calificacion* a_borrar = calificaciones.back();
         calificaciones.pop_back();
         delete a_borrar;
     }

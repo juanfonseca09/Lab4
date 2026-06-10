@@ -19,35 +19,15 @@ ControladorUsuario* ControladorUsuario::getInstance() {
 
 bool ControladorUsuario::altaPasajero(std::string nickname, std::string nombre, std::string contrasena, std::string email, std::string ci) {
     ManejadorUsuario* mu = ManejadorUsuario::getInstance();
-    if (mu->existeUsuario(nickname))
-        return false;
-    Pasajero* p = new Pasajero(nickname, nombre, contrasena, email, ci);
-    mu->agregarUsuario(p);
-    return true;
+    return mu->altaPasajero(nickname, nombre, contrasena, email, ci);
 }
 
 bool ControladorUsuario::altaConductor(std::string nickname, std::string nombre, std::string contrasena, std::string email, std::set<TipoLibreta> libretas) {
     ManejadorUsuario* mu = ManejadorUsuario::getInstance();
-    if (mu->existeUsuario(nickname))
-        return false;
-    Conductor* c = new Conductor(nickname, nombre, contrasena, email, libretas);
-    mu->agregarUsuario(c);
-    return true;
+    return mu->altaConductor(nickname, nombre, contrasena, email, libretas);
 }
 
 int ControladorUsuario::registrarVehiculo(std::string nickname, std::string matricula, int capacidad, std::string marca, std::string modelo, TipoVehiculo tipo) {
     ManejadorUsuario* mu = ManejadorUsuario::getInstance();
-    ManejadorVehiculo* mv = ManejadorVehiculo::getInstance();
-    Usuario* u = mu->find(nickname);
-    Conductor* c = dynamic_cast<Conductor*>(u);
-    if (c == NULL)
-        return -2;
-    if (mv->existeVehiculo(matricula))
-        return -1;
-    if (!c->puedeConducir(tipo))
-        return -2;
-    Vehiculo* v = new Vehiculo(matricula, capacidad, marca, modelo, tipo, c);
-    c->agregarVehiculo(v);
-    mv->agregarVehiculo(v);
-    return 0;
+    return mu->registrarVehiculo(nickname, matricula, capacidad, marca, modelo, tipo);
 }

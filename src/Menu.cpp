@@ -4,7 +4,7 @@
 #include "../include/CargaDatos.h"
 #include "../include/DTFecha.h"
 #include "../include/TipoLibreta.h"
-#include "../include/ManejadorVehiculo.h"
+#include "../include/ManejadorUsuario.h"
 #include "../include/Vehiculo.h"
 #include "../include/Conductor.h"
 #include <iostream>
@@ -119,8 +119,8 @@ void Menu::altaViaje() {
 
     std::cout << "Ingrese nickname del conductor: "; std::getline(std::cin, nickname);
 
-    ManejadorVehiculo* mv = ManejadorVehiculo::getInstance();
-    std::map<std::string, Vehiculo*> todos = mv->getVehiculos();
+    ManejadorUsuario* mu = ManejadorUsuario::getInstance();
+    std::map<std::string, Vehiculo*> todos = mu->getVehiculos();
     std::vector<std::string> disponibles;
     std::map<std::string, Vehiculo*>::iterator it;
     std::cout << "\nVehiculos del conductor " << nickname << ":\n";

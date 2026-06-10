@@ -37,10 +37,8 @@ bool ControladorReserva::altaViaje(std::string matricula, DTFecha fecha, std::st
         return false;
     if (vehiculo->hayViajeFecha(fecha))
         return false;
-    int codigo = mviajes->generarCodigo();
-    Viaje* viaje = new Viaje(codigo,fecha,origen,destino,asientos,precio,vehiculo);
+    Viaje* viaje = mviajes->createViaje(vehiculo,fecha,origen,destino,asientos,precio);
     vehiculo->agregarViaje(viaje);
-    mviajes->agregarViaje(viaje);
     return true;
 }
 

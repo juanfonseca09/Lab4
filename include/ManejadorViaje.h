@@ -2,6 +2,7 @@
 #define MANEJADOR_VIAJE_H
 
 #include <map>
+#include "Viaje.h"
 
 class Viaje;
 
@@ -14,6 +15,7 @@ private:
 public:
     ~ManejadorViaje();
     static ManejadorViaje* getInstance();
+    Viaje* createViaje(Vehiculo* vehiculo, DTFecha fecha, std::string origen, std::string destino, int asientos, float precio);
     void agregarViaje(Viaje* v);
     Viaje* find(int codigo);
     bool existeViaje(int codigo);

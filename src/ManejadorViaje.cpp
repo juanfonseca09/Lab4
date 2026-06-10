@@ -10,8 +10,10 @@ ManejadorViaje::ManejadorViaje() {
 ManejadorViaje::~ManejadorViaje() {
     while (!viajes.empty())
     {
-        Viaje* a_borrar = viajes.end()->second();
-        viajes.erase(viajes.end());
+        std::map<int, Viaje*>::iterator it = viajes.end();
+        --it;
+        Viaje* a_borrar = it->second;
+        viajes.erase(it);
         delete a_borrar;
     }
 }
@@ -25,6 +27,13 @@ ManejadorViaje* ManejadorViaje::getInstance() {
 void ManejadorViaje::agregarViaje(Viaje* v) {
     if (v != NULL)
         viajes[v->getCodigo()] = v;
+}
+
+Viaje* ManejadorViaje::createViaje(Vehiculo* vehiculo, DTFecha fecha, std::string origen, std::string destino, int asientos, float precio) {
+    int codigo = generarCodigo();
+    Viaje* viaje = new Viaje(codigo, fecha, origen, destino, asientos, precio, vehiculo);
+    agregarViaje(viaje);
+    return viaje;
 }
 
 Viaje* ManejadorViaje::find(int codigo) {
