@@ -7,7 +7,6 @@
 #include "../include/DTConsultaViaje.h"
 #include "../include/Conductor.h"
 #include "../include/ControladorReserva.h"
-#include "../include/ManejadorVehiculo.h"
 #include "../include/Vehiculo.h"
 #include "../include/Viaje.h"
 #include <map>
@@ -19,8 +18,6 @@ ControladorReserva::ControladorReserva() {
     codigoRecordado = -1;
 }
 
-ManejadorVehiculo* mv = ManejadorVehiculo::getInstance();
-
 ControladorReserva* ControladorReserva::getInstance() {
     if (instancia == NULL)
         instancia = new ControladorReserva();
@@ -28,16 +25,26 @@ ControladorReserva* ControladorReserva::getInstance() {
 }
 
 bool ControladorReserva::altaViaje(std::string matricula, DTFecha fecha, std::string origen, std::string destino, int asientos, float precio) {
-    ManejadorVehiculo* mv = ManejadorVehiculo::getInstance();
+    ManejadorUsuario* mu = ManejadorUsuario::getInstance();
     ManejadorViaje* mviajes = ManejadorViaje::getInstance();
-    Vehiculo* vehiculo = mv->find(matricula);
+    Vehiculo* vehiculo = NULL;
+    std::map<std::string, Usuario*> usuarios = mu->getUsuarios();
+    std::map<std::string, Usuario*>::iterator it;
+    for (it = usuarios.begin(); it != usuarios.end(); ++it) {
+        Conductor* conductor = dynamic_cast<Conductor*>(it->second);
+        if (conductor != NULL) {
+            vehiculo = conductor->buscarVehiculo(matricula);
+            if (vehiculo != NULL)
+                break;
+        }
+    }
     if (vehiculo == NULL)
         return false;
     if (asientos > vehiculo->getCapacidad())
         return false;
     if (vehiculo->hayViajeFecha(fecha))
         return false;
-    Viaje* viaje = mviajes->createViaje(vehiculo,fecha,origen,destino,asientos,precio);
+    Viaje* viaje = mviajes->createViaje( vehiculo, fecha, origen, destino, asientos, precio);
     vehiculo->agregarViaje(viaje);
     return true;
 }
@@ -89,7 +96,7 @@ std::vector<DTConsultaViaje> ControladorReserva::consultarViajes( DTFecha fecha,
         if (!viaje->coincideCon(fecha, origen, destino,asientos))
             continue;
         Vehiculo* vehiculo = viaje->getVehiculo();
-        DTConsultaViaje dt(viaje->getCodigo(),vehiculo->getMarca(),vehiculo->getModelo(),"", 0,viaje->getPrecio() * asientos);
+        DTConsultaViaje dt(viaje->getCodigo(),vehiculo->getMarca(),vehiculo->getModelo(),vehiculo->getConductor()->getNickname(),vehiculo->getConductor()->getCalifProm(),viaje->getPrecio() * asientos);
         resultado.push_back(dt);
     }
     return resultado;
@@ -128,4 +135,18 @@ void ControladorReserva::eliminarViaje() {
     viaje->getVehiculo()->eliminarViaje(codigoRecordado);
     mv->eliminarViaje(codigoRecordado);
     codigoRecordado = -1;
+}
+
+DTVehiculosConductor ControladorReserva::listarVehiculosConductor(std::string nickname) {
+    std::vector<DTDetalleVehiculo> resultado;
+    ManejadorUsuario* mu = ManejadorUsuario::getInstance();
+    Usuario* u = mu->find(nickname);
+    Conductor* c = dynamic_cast<Conductor*>(u);
+    if(c == NULL)
+        return DTVehiculosConductor(resultado);
+    std::vector<Vehiculo*> vehiculos = c->getVehiculos();
+    for(unsigned i = 0; i < vehiculos.size(); i++) {
+        resultado.push_back(DTDetalleVehiculo(vehiculos[i]->getMatricula(),vehiculos[i]->getCapacidad(),vehiculos[i]->getMarca(),vehiculos[i]->getModelo(),vehiculos[i]->getTipo()));
+    }
+    return DTVehiculosConductor(resultado);
 }

@@ -8,3 +8,4 @@ DTVehiculosConductor::DTVehiculosConductor(std::vector<DTDetalleVehiculo> vehicu
 std::vector<DTDetalleVehiculo> DTVehiculosConductor::getVehiculos() {
     return vehiculos;
 }
+

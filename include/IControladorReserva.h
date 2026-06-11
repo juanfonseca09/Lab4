@@ -9,6 +9,7 @@
 #include "DTConsultaViaje.h"
 #include "DTListarViaje.h"
 #include "DTDetalleViaje.h"
+#include "DTVehiculosConductor.h"
 
 class IControladorReserva {
 public:
@@ -21,6 +22,7 @@ public:
     virtual DTDetalleViaje detalleViaje(int codigo)=0;
     virtual void eliminarViaje()=0;
     virtual void cancelarEliminarViaje()=0;
+    virtual DTVehiculosConductor listarVehiculosConductor(std::string nickname)=0;
 };
 
 #endif

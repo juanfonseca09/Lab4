@@ -26,6 +26,7 @@ public:
     DTDetalleViaje detalleViaje(int codigo);
     void eliminarViaje();
     void cancelarEliminarViaje();
+    DTVehiculosConductor listarVehiculosConductor(std::string nickname);
 };
 
 #endif
