@@ -53,22 +53,20 @@ bool ControladorReserva::generarReserva(std::string nickname, int codigo, int as
     ManejadorUsuario* mu = ManejadorUsuario::getInstance();
     ManejadorViaje* mv = ManejadorViaje::getInstance();
     ManejadorReserva* mr = ManejadorReserva::getInstance();
-    Usuario* u = mu->find(nickname);
-    Pasajero* pasajero = dynamic_cast<Pasajero*>(u);
-    if (pasajero == NULL)
-        return false;
     Viaje* viaje = mv->find(codigo);
     if (viaje == NULL)
         return false;
-    if (!viaje->tieneDisponibilidad(asientos))
-        return false;
     if (viaje->tieneReservaDePasajero(nickname))
         return false;
+    if (!viaje->tieneDisponibilidad(asientos))
+        return false;
+    Usuario* u = mu->find(nickname);
+    Pasajero* pasajero = dynamic_cast<Pasajero*>(u); // Se asume que pasajero no puede ser null por las verificaciones previas en el menu.
     DTFecha fechaActual = ControladorFechaActual::getInstance()->getFecha();
     Reserva* reserva = new Reserva(asientos,fechaActual,pasajero,viaje);
+    mr->agregarReserva(reserva);
     viaje->agregarReserva(reserva);
     pasajero->agregarReserva(reserva);
-    mr->agregarReserva(reserva);
     return true;
 }
 
