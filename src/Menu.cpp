@@ -3,6 +3,7 @@
 #include "../include/IControladorFechaActual.h"
 #include "../include/CargaDatos.h"
 #include "../include/DTFecha.h"
+#include "../include/DTVehiculosConductor.h"
 #include <iostream>
 #include <limits>
 #include <string>
@@ -29,12 +30,35 @@ void Menu::altaUsuario() {
 
     bool usuarioOk = false;
 
+    Fabrica* fabrica = Fabrica::getInstance();
+    IControladorUsuario* ctrlUsuario = fabrica->getIControladorUsuario();
+
     if (tipoUsuario == 1) {
         std::string ci;
         std::cout << "Ingrese CI: "; std::getline(std::cin, ci);
-        //TODO: usuarioOk = controlador->altaPasajero(nickname, nombre, contrasena, email, ci)
+        usuarioOk = ctrlUsuario->altaPasajero(nickname, nombre, contrasena, email, ci);
     } else if (tipoUsuario == 2) {
-        //TODO: usuarioOk = controlador->altaConductor(nickname, nombre, contrasena, email, libretas)
+        std::set<TipoLibreta> libretas;
+        std::cout << "\n=== Registrar Libretas ===\n";
+        std::cout << "Indique cuales libretas posee (1: Si, 0: No)\n";
+        
+        int tieneMotoAm, tieneMotoProf, tieneAutoAm, tieneAutoProf;
+        
+        std::cout << "¿Posee libreta Moto Amateur? (1: Si, 0: No): "; std::cin >> tieneMotoAm;
+        if (tieneMotoAm == 1) libretas.insert(MotoAmateur);
+        
+        std::cout << "¿Posee libreta Moto Profesional? (1: Si, 0: No): "; std::cin >> tieneMotoProf;
+        if (tieneMotoProf == 1) libretas.insert(MotoProfesional);
+        
+        std::cout << "¿Posee libreta Auto Amateur? (1: Si, 0: No): "; std::cin >> tieneAutoAm;
+        if (tieneAutoAm == 1) libretas.insert(AutoAmateur);
+        
+        std::cout << "¿Posee libreta Auto Profesional? (1: Si, 0: No): "; std::cin >> tieneAutoProf;
+        if (tieneAutoProf == 1) libretas.insert(AutoProfesional);
+        
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        usuarioOk = ctrlUsuario->altaConductor(nickname, nombre, contrasena, email, libretas);
         int agregarVehiculo = 1;
         while (usuarioOk == true && agregarVehiculo == 1) {
             std::string matricula, marca, modelo;
@@ -48,7 +72,7 @@ void Menu::altaUsuario() {
             std::cout << "Ingrese tipo (0: Auto, 1: Moto): "; std::cin >> tipo;
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             int resultadoRegistrarVehiculo = -3;
-            //TODO: resultadoRegistrarVehiculo = controlador->registrarVehiculo(nickname, matricula, capacidad, marca, modelo, tipo)
+            resultadoRegistrarVehiculo = ctrlUsuario->registrarVehiculo (nickname, matricula, capacidad, marca, modelo, (TipoVehiculo)tipo);
             if (resultadoRegistrarVehiculo == -1) {
                 std::cout << "Ya existe un vehiculo con esa matricula.\n";
             } else if (resultadoRegistrarVehiculo == -2) {
@@ -68,13 +92,42 @@ void Menu::altaViaje() {
     int dia, mes, anio, asientos;
     float precio;
 
+    Fabrica* fabrica = Fabrica::getInstance();
+    IControladorReserva* ctrlReserva = fabrica->getIControladorReserva();
+
     std::cout << "Ingrese nickname del conductor: "; std::getline(std::cin, nickname);
-    //TODO: Coleccion de DTVehiculosConductor = controlador->listarVehiculosConductor(nickname)
-    //TODO: Recorrer la coleccion y mostrar "> Matricula: xx, Capacidad: yy, Marca: zzz, Modelo: www, Tipo: ttt"
+    DTVehiculosConductor dtVehiculos = ctrlReserva->listarVehiculosConductor(nickname);
+    std::vector<DTDetalleVehiculo> vehiculos = dtVehiculos.getVehiculos();
+    if (vehiculos.empty()) {
+        std::cout << "El conductor no tiene vehiculos.\n";
+    } else {
+        for (size_t i = 0; i < vehiculos.size(); ++i) {
+            DTDetalleVehiculo v = vehiculos[i];
+            std::string tipoStr;
+            if (v.getTipo() == Auto)
+                tipoStr = "Auto";
+            else
+                tipoStr = "Moto";
+            std::cout << "> Matricula: " << v.getMatricula()
+                      << ", Capacidad: " << v.getCapacidad()
+                      << ", Marca: " << v.getMarca()
+                      << ", Modelo: " << v.getModelo()
+                      << ", Tipo: " << tipoStr << "\n";
+        }
+    }
+    
 
     std::cout << "Ingrese matricula del vehiculo a utilizar: "; std::getline(std::cin, matricula);
     bool matriculaValida = false;
+
     //TODO: Validar matricula en listado
+    for (size_t i = 0; i < vehiculos.size(); i++) {
+        if (vehiculos[i].getMatricula() == matricula) {
+            matriculaValida = true;
+            break;
+        }
+    }
+
     if (!matriculaValida) {
         std::cout << "Matricula invalida.\n";
         return;
@@ -88,7 +141,7 @@ void Menu::altaViaje() {
     std::cout << "Ingrese precio por asiento: "; std::cin >> precio;
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     bool viajeOk = false;
-    //TODO: viajeOk = controlador->altaViaje(matricula, DTFecha(dia, mes, anio), origen, destino, asientos, precio)
+    viajeOk = ctrlReserva->altaViaje(matricula, DTFecha(dia, mes, anio), origen, destino, asientos, precio);
     if (viajeOk) {
         std::cout << "Viaje registrado exitosamente.\n";
     } else {
