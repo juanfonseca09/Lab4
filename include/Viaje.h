@@ -1,11 +1,11 @@
 #ifndef VIAJE_H
 #define VIAJE_H
 
-#include <string>
-#include <vector>
-
 #include "DTFecha.h"
 #include "DTDetalleViaje.h"
+
+#include <string>
+#include <vector>
 
 class Vehiculo;
 class Reserva;
@@ -18,27 +18,36 @@ private:
     std::string destino;
     int asientosPublicados;
     float precio;
+
     Vehiculo* vehiculo;
     std::vector<Reserva*> reservas;
+
 public:
-    Viaje(int codigo, DTFecha fecha, std::string origen, std::string destino, int asientosPublicados, float precio, Vehiculo* vehiculo);
-    virtual ~Viaje();
-    int getCodigo() const;
-    DTFecha getFecha() const;
-    std::string getOrigen() const;
-    std::string getDestino() const;
-    int getAsientosPublicados() const;
-    float getPrecio() const;
-    Vehiculo* getVehiculo() const;
-    int getAsientosReservados() const;
-    int getAsientosDisponibles() const;
-    bool tieneDisponibilidad(int cantidadAsientos) const;
+    Viaje(int codigo, Vehiculo* vehiculo, DTFecha fecha, std::string origen, std::string destino, int asientosPublicados, float precio);
+    ~Viaje();
+
+    int getCodigo();
+    DTFecha getFecha();
+    std::string getOrigen();
+    std::string getDestino();
+    int getAsientosPublicados();
+    float getPrecio();
+
+    Vehiculo* getVehiculo();
+
     void agregarReserva(Reserva* reserva);
-    std::vector<Reserva*> getReservas() const;
-    bool tieneReservaDePasajero(std::string nicknamePasajero) const;
-    Reserva* buscarReservaDePasajero(std::string nicknamePasajero) const;
-    bool coincideCon(DTFecha fecha, std::string origen, std::string destino, int cantidadAsientos) const;
-    DTDetalleViaje getDetalle() const;
+    std::vector<Reserva*> getReservas();
+
+    int getAsientosReservados();
+    int getAsientosDisponibles();
+    bool tieneDisponibilidad(int cantidadAsientos);
+
+    bool tieneReservaDePasajero(std::string nicknamePasajero);
+    Reserva* buscarReservaDePasajero(std::string nicknamePasajero);
+
+    bool coincideCon(DTFecha fecha, std::string origen, std::string destino, int cantidadAsientos);
+
+    DTDetalleViaje getDetalle();
 };
 
 #endif

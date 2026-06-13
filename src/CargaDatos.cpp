@@ -5,6 +5,9 @@
 #include "../include/IControladorCalificacion.h"
 #include "../include/IControladorFechaActual.h"
 #include "../include/DTFecha.h"
+#include "../include/TipoLibreta.h"
+#include "../include/TipoVehiculo.h"
+
 #include <iostream>
 #include <set>
 
@@ -18,6 +21,7 @@ CargaDatos* CargaDatos::getInstance() {
     if (instancia == NULL) {
         instancia = new CargaDatos();
     }
+
     return instancia;
 }
 
@@ -35,79 +39,119 @@ void CargaDatos::cargarDatos() {
     IControladorCalificacion* ctrlCal = fabrica->getIControladorCalificacion();
     IControladorFechaActual* ctrlFecha = fabrica->getIControladorFechaActual();
 
-    // Establecer una fecha inicial (se puede modificar luego desde el menú)
-    ctrlFecha->setFecha(DTFecha(1,1,2026));
+    // Fecha inicial del sistema
+    ctrlFecha->setFecha(DTFecha(1, 1, 2026));
 
-    // Alta de pasajeros (nickname, nombre, contrasena, email, ci)
-    // Nota: no crear `juan_p` ni `pedro_c` aquí para evitar duplicados cuando se
-    // crean en el flujo de prueba en `entrada.txt`.
-    ctrlUsuario->altaPasajero("mari_b", "Maria Noel Barreto", "maribarreto6", "mb@fing.edu.uy", "4.103.859-1");
-    ctrlUsuario->altaPasajero("nacho_f", "Ignacio Figueroa", "ifigueroa26", "if@fing.edu.uy", "3.847.112-5");
-    ctrlUsuario->altaPasajero("santi_90", "Santiago Acosta", "sacosta90", "sa@fing.edu.uy", "1.492.304-2");
-    ctrlUsuario->altaPasajero("valen_uy", "Valentina Mendez", "vmendezQ2", "vm@fing.edu.uy", "2.956.403-0");
-    ctrlUsuario->altaPasajero("joaco_r", "Joaquin Rivero", "jrivero99x", "joaquin_rivero@hotmail.com", "5.021.784-3");
+    /*
+     * Alta de pasajeros.
+     * No cargamos juan_p porque se crea manualmente en entrada.txt.
+     */
+    ctrlUsuario->altaPasajero(
+        "mari_b",
+        "Maria Noel Barreto",
+        "maribarreto6",
+        "mb@fing.edu.uy",
+        "4.103.859-1"
+    );
 
-    // Alta de conductores (nickname, nombre, contrasena, email, libretas)
+    ctrlUsuario->altaPasajero(
+        "nacho_f",
+        "Ignacio Figueroa",
+        "ifigueroa26",
+        "if@fing.edu.uy",
+        "3.847.112-5"
+    );
 
-    // matil92 - AutoAmateur
-    std::set<TipoLibreta> lib2;
-    lib2.insert(AutoAmateur);
+    ctrlUsuario->altaPasajero(
+        "santi_90",
+        "Santiago Acosta",
+        "sacosta90",
+        "sa@fing.edu.uy",
+        "1.492.304-2"
+    );
+
+    ctrlUsuario->altaPasajero(
+        "valen_uy",
+        "Valentina Mendez",
+        "vmendezQ2",
+        "vm@fing.edu.uy",
+        "2.956.403-0"
+    );
+
+    ctrlUsuario->altaPasajero(
+        "joaco_r",
+        "Joaquin Rivero",
+        "jrivero99x",
+        "joaquin_rivero@hotmail.com",
+        "5.021.784-3"
+    );
+
+    /*
+     * Alta de conductores.
+     * No cargamos pedro_c porque se crea manualmente en entrada.txt.
+     */
+
+    std::set<TipoLibreta> libMatil;
+    libMatil.insert(AutoAmateur);
+
     ctrlUsuario->altaConductor(
         "matil92",
         "Matias Lopez",
         "m4t14s92",
         "matias.lopez.92@gmail.com",
-        lib2
+        libMatil
     );
 
-    // ana_silva - AutoProfesional
-    std::set<TipoLibreta> lib3;
-    lib3.insert(AutoProfesional);
+    std::set<TipoLibreta> libAna;
+    libAna.insert(AutoProfesional);
+
     ctrlUsuario->altaConductor(
         "ana_silva",
         "Ana Silva",
         "asilva2026",
         "anasilva.m@outlook.com",
-        lib3
+        libAna
     );
 
-    // greg_m - MotoAmateur
-    std::set<TipoLibreta> lib4;
-    lib4.insert(MotoAmateur);
+    std::set<TipoLibreta> libGreg;
+    libGreg.insert(MotoAmateur);
+
     ctrlUsuario->altaConductor(
         "greg_m",
         "Diego Rodriguez",
         "drodriguez88",
         "diegodriguez@fing.edu.uy",
-        lib4
+        libGreg
     );
 
-    // lau_vaz - MotoProfesional
-    std::set<TipoLibreta> lib5;
-    lib5.insert(MotoProfesional);
+    std::set<TipoLibreta> libLaura;
+    libLaura.insert(MotoProfesional);
+
     ctrlUsuario->altaConductor(
         "lau_vaz",
         "Laura Vazquez",
         "lvazquezQ7",
         "laura.vazquez@fing.edu.uy",
-        lib5
+        libLaura
     );
 
-    // carlos_r - AutoProfesional + MotoAmateur
-    std::set<TipoLibreta> lib6;
-    lib6.insert(AutoProfesional);
-    lib6.insert(MotoAmateur);
+    std::set<TipoLibreta> libCarlos;
+    libCarlos.insert(AutoProfesional);
+    libCarlos.insert(MotoAmateur);
+
     ctrlUsuario->altaConductor(
         "carlos_r",
         "Carlos Rossi",
         "crossi99x",
         "carlos.rossi.uy@gmail.com",
-        lib6
+        libCarlos
     );
 
-    // Registrar vehículos para conductores (no registrar qtr1515 aquí)
+    /*
+     * Registrar vehiculos.
+     * No registramos qtr1515 porque se registra manualmente para pedro_c.
+     */
 
-    // matil92
     ctrlUsuario->registrarVehiculo(
         "matil92",
         "ABJ4586",
@@ -126,8 +170,6 @@ void CargaDatos::cargarDatos() {
         Auto
     );
 
-
-    // ana_silva
     ctrlUsuario->registrarVehiculo(
         "ana_silva",
         "BAS7895",
@@ -146,8 +188,6 @@ void CargaDatos::cargarDatos() {
         Auto
     );
 
-
-    // greg_m
     ctrlUsuario->registrarVehiculo(
         "greg_m",
         "LDA4875",
@@ -157,8 +197,6 @@ void CargaDatos::cargarDatos() {
         Moto
     );
 
-
-    // lau_vaz
     ctrlUsuario->registrarVehiculo(
         "lau_vaz",
         "PDB1205",
@@ -168,8 +206,6 @@ void CargaDatos::cargarDatos() {
         Moto
     );
 
-
-    // carlos_r
     ctrlUsuario->registrarVehiculo(
         "carlos_r",
         "SBJ4874",
@@ -188,143 +224,148 @@ void CargaDatos::cargarDatos() {
         Moto
     );
 
-    // Crear viajes (matricula, fecha, origen, destino, asientos, precio)
+    /*
+     * Crear viajes.
+     * Los codigos se generan automaticamente por orden de insercion.
+     */
 
-    // Código 1
+    // Codigo 1
     ctrlReserva->altaViaje(
         "ABJ4586",
-        DTFecha(21,10,2026),
+        DTFecha(21, 10, 2026),
         "montevideo",
         "mercedes",
         4,
         200.0f
     );
 
-    // Código 2
+    // Codigo 2
     ctrlReserva->altaViaje(
         "ACM4455",
-        DTFecha(20,10,2026),
+        DTFecha(20, 10, 2026),
         "young",
         "montevideo",
         5,
         250.0f
     );
 
-    // Código 3
+    // Codigo 3
     ctrlReserva->altaViaje(
         "BAS7895",
-        DTFecha(20,10,2026),
+        DTFecha(20, 10, 2026),
         "young",
         "montevideo",
         4,
         200.0f
     );
 
-    // Código 4
+    // Codigo 4
     ctrlReserva->altaViaje(
         "BCS4105",
-        DTFecha(21,10,2026),
+        DTFecha(21, 10, 2026),
         "montevideo",
         "mercedes",
         9,
         200.0f
     );
 
-    // Código 5
+    // Codigo 5
     ctrlReserva->altaViaje(
         "LDA4875",
-        DTFecha(21,10,2026),
+        DTFecha(21, 10, 2026),
         "montevideo",
         "mercedes",
         1,
         300.0f
     );
 
-    // Código 6
+    // Codigo 6
     ctrlReserva->altaViaje(
         "PDB1205",
-        DTFecha(21,10,2026),
+        DTFecha(21, 10, 2026),
         "montevideo",
         "mercedes",
         1,
         350.0f
     );
 
-    // Código 7
+    // Codigo 7
     ctrlReserva->altaViaje(
         "SBJ4874",
-        DTFecha(21,10,2026),
+        DTFecha(21, 10, 2026),
         "montevideo",
         "mercedes",
         4,
         260.0f
     );
 
-    // Código 8
+    // Codigo 8
     ctrlReserva->altaViaje(
         "SCF2469",
-        DTFecha(20,10,2026),
+        DTFecha(20, 10, 2026),
         "montevideo",
         "cerro chato",
         1,
         150.0f
     );
 
-    // Código 9
+    // Codigo 9
     ctrlReserva->altaViaje(
         "ABJ4586",
-        DTFecha(15,3,2026),
+        DTFecha(15, 3, 2026),
         "montevideo",
         "colonia",
         4,
         140.0f
     );
 
-    // Código 10
+    // Codigo 10
     ctrlReserva->altaViaje(
         "BCS4105",
-        DTFecha(15,3,2026),
+        DTFecha(15, 3, 2026),
         "montevideo",
         "colonia",
         9,
         180.0f
     );
 
-    // Código 11
+    // Codigo 11
     ctrlReserva->altaViaje(
         "SBJ4874",
-        DTFecha(15,3,2026),
+        DTFecha(15, 3, 2026),
         "montevideo",
         "colonia",
         1,
         100.0f
     );
 
-    // Código 12
+    // Codigo 12
     ctrlReserva->altaViaje(
         "SBJ4874",
-        DTFecha(14,3,2026),
+        DTFecha(14, 3, 2026),
         "montevideo",
         "colonia",
         4,
         600.0f
     );
 
-    // Código 13
+    // Codigo 13
     ctrlReserva->altaViaje(
         "LDA4875",
-        DTFecha(20,10,2026),
+        DTFecha(20, 10, 2026),
         "young",
         "montevideo",
         1,
         250.0f
     );
 
-    // Generar reservas (nickname, codigo, asientos)
-    // Note: códigos de viaje se asignan internamente; asumiendo orden de inserción, utilizamos aproximaciones.
-    // Generar reservas (nickname, codigo, asientos)
+    /*
+     * Generar reservas.
+     * Para que las reservas queden con la fecha correcta, seteamos la fecha actual.
+     */
+    ctrlFecha->setFecha(DTFecha(14, 3, 2026));
 
-    // Viaje 9 - ABJ4586 - 14/3/2026
+    // Viaje 9
     ctrlReserva->generarReserva(
         "santi_90",
         9,
@@ -337,7 +378,13 @@ void CargaDatos::cargarDatos() {
         1
     );
 
-    // Viaje 10 - BCS4105 - 14/3/2026
+    ctrlReserva->generarReserva(
+        "nacho_f",
+        9,
+        1
+    );
+
+    // Viaje 10
     ctrlReserva->generarReserva(
         "nacho_f",
         10,
@@ -356,7 +403,7 @@ void CargaDatos::cargarDatos() {
         1
     );
 
-    // Viaje 12 - SBJ4874 - 14/3/2026
+    // Viaje 12
     ctrlReserva->generarReserva(
         "mari_b",
         12,
@@ -369,62 +416,52 @@ void CargaDatos::cargarDatos() {
         1
     );
 
-    // Viaje 1 - ABJ4586 - 21/10/2026
+    // Viaje 1
     ctrlReserva->generarReserva(
         "mari_b",
         1,
         2
     );
 
-    // Viaje 9 - ABJ4586 - 15/3/2026
-    ctrlReserva->generarReserva(
-        "nacho_f",
-        9,
-        1
-    );
-
-    // Realizar calificaciones (nickname, codigo, nicknameCalificado, calificacion)
+    /*
+     * Realizar calificaciones.
+     * Se usa el flujo del caso de uso:
+     * listarViajes -> listarUsuariosViaje -> calificarUsuario.
+     */
+    ctrlFecha->setFecha(DTFecha(14, 3, 2026));
 
     // Viaje 9
-    ctrlCal->recordarUsuarioCalificador("santi_90");
-    ctrlCal->recordarCodigoViaje(9);
+    ctrlCal->listarViajes("santi_90");
     ctrlCal->listarUsuariosViaje(9);
     ctrlCal->calificarUsuario("matil92", 4);
 
-    ctrlCal->recordarUsuarioCalificador("mari_b");
-    ctrlCal->recordarCodigoViaje(9);
+    ctrlCal->listarViajes("mari_b");
     ctrlCal->listarUsuariosViaje(9);
     ctrlCal->calificarUsuario("matil92", 4);
 
-    ctrlCal->recordarUsuarioCalificador("matil92");
-    ctrlCal->recordarCodigoViaje(9);
+    ctrlCal->listarViajes("matil92");
     ctrlCal->listarUsuariosViaje(9);
     ctrlCal->calificarUsuario("mari_b", 3);
 
-
     // Viaje 10
-    ctrlCal->recordarUsuarioCalificador("ana_silva");
-    ctrlCal->recordarCodigoViaje(10);
+    ctrlCal->listarViajes("ana_silva");
     ctrlCal->listarUsuariosViaje(10);
     ctrlCal->calificarUsuario("valen_uy", 5);
 
-    ctrlCal->recordarUsuarioCalificador("ana_silva");
-    ctrlCal->recordarCodigoViaje(10);
+    ctrlCal->listarViajes("ana_silva");
     ctrlCal->listarUsuariosViaje(10);
     ctrlCal->calificarUsuario("joaco_r", 5);
 
-
     // Viaje 12
-    ctrlCal->recordarUsuarioCalificador("mari_b");
-    ctrlCal->recordarCodigoViaje(12);
+    ctrlCal->listarViajes("mari_b");
     ctrlCal->listarUsuariosViaje(12);
     ctrlCal->calificarUsuario("carlos_r", 5);
 
-    ctrlCal->recordarUsuarioCalificador("carlos_r");
-    ctrlCal->recordarCodigoViaje(12);
+    ctrlCal->listarViajes("carlos_r");
     ctrlCal->listarUsuariosViaje(12);
     ctrlCal->calificarUsuario("nacho_f", 5);
 
     datosCargados = true;
+
     std::cout << "Datos cargados exitosamente.\n";
 }

@@ -4,64 +4,48 @@
 #include "../include/DTDetalleVehiculo.h"
 #include "../include/DTDetalleReserva.h"
 
-Viaje::Viaje(int codigo, DTFecha fecha, std::string origen, std::string destino, int asientosPublicados, float precio, Vehiculo* vehiculo) {
+Viaje::Viaje(int codigo, Vehiculo* vehiculo, DTFecha fecha, std::string origen, std::string destino, int asientosPublicados, float precio) {
     this->codigo = codigo;
+    this->vehiculo = vehiculo;
     this->fecha = fecha;
     this->origen = origen;
     this->destino = destino;
     this->asientosPublicados = asientosPublicados;
     this->precio = precio;
-    this->vehiculo = vehiculo;
 }
 
 Viaje::~Viaje() {
-    for (unsigned  i = 0; i < reservas.size(); i++) {
+    for (unsigned int i = 0; i < reservas.size(); i++) {
         delete reservas[i];
     }
 }
 
-int Viaje::getCodigo() const {
+int Viaje::getCodigo() {
     return codigo;
 }
 
-DTFecha Viaje::getFecha() const {
+DTFecha Viaje::getFecha() {
     return fecha;
 }
 
-std::string Viaje::getOrigen() const {
+std::string Viaje::getOrigen() {
     return origen;
 }
 
-std::string Viaje::getDestino() const {
+std::string Viaje::getDestino() {
     return destino;
 }
 
-int Viaje::getAsientosPublicados() const {
+int Viaje::getAsientosPublicados() {
     return asientosPublicados;
 }
 
-float Viaje::getPrecio() const {
+float Viaje::getPrecio() {
     return precio;
 }
 
-Vehiculo* Viaje::getVehiculo() const {
+Vehiculo* Viaje::getVehiculo() {
     return vehiculo;
-}
-
-int Viaje::getAsientosReservados() const {
-    int total = 0;
-    for (unsigned  i = 0; i < reservas.size(); i++) {
-        total += reservas[i]->getAsientosReservados();
-    }
-    return total;
-}
-
-int Viaje::getAsientosDisponibles() const {
-    return asientosPublicados - getAsientosReservados();
-}
-
-bool Viaje::tieneDisponibilidad(int cantidadAsientos) const {
-    return cantidadAsientos > 0 && cantidadAsientos <= getAsientosDisponibles();
 }
 
 void Viaje::agregarReserva(Reserva* reserva) {
@@ -70,35 +54,72 @@ void Viaje::agregarReserva(Reserva* reserva) {
     }
 }
 
-std::vector<Reserva*> Viaje::getReservas() const {
+std::vector<Reserva*> Viaje::getReservas() {
     return reservas;
 }
 
-bool Viaje::tieneReservaDePasajero(std::string nicknamePasajero) const {
+int Viaje::getAsientosReservados() {
+    int total = 0;
+
+    for (unsigned int i = 0; i < reservas.size(); i++) {
+        total = total + reservas[i]->getAsientosReservados();
+    }
+
+    return total;
+}
+
+int Viaje::getAsientosDisponibles() {
+    return asientosPublicados - getAsientosReservados();
+}
+
+bool Viaje::tieneDisponibilidad(int cantidadAsientos) {
+    return cantidadAsientos > 0 && cantidadAsientos <= getAsientosDisponibles();
+}
+
+bool Viaje::tieneReservaDePasajero(std::string nicknamePasajero) {
     return buscarReservaDePasajero(nicknamePasajero) != NULL;
 }
 
-Reserva* Viaje::buscarReservaDePasajero(std::string nicknamePasajero) const {
-    for (unsigned  i = 0; i < reservas.size(); i++) {
+Reserva* Viaje::buscarReservaDePasajero(std::string nicknamePasajero) {
+    for (unsigned int i = 0; i < reservas.size(); i++) {
         if (reservas[i]->perteneceAPasajero(nicknamePasajero)) {
             return reservas[i];
         }
     }
+
     return NULL;
 }
 
-bool Viaje::coincideCon(DTFecha fecha, std::string origen, std::string destino, int cantidadAsientos) const {
-    return this->fecha == fecha && this->origen == origen && this->destino == destino && tieneDisponibilidad(cantidadAsientos);
+bool Viaje::coincideCon(DTFecha fecha, std::string origen, std::string destino, int cantidadAsientos) {
+    return this->fecha == fecha &&
+           this->origen == origen &&
+           this->destino == destino &&
+           tieneDisponibilidad(cantidadAsientos);
 }
 
-DTDetalleViaje Viaje::getDetalle() const {
-    DTDetalleVehiculo detalleVehiculo("", 0, "", "", Auto);
-    if (vehiculo != NULL) {
-        detalleVehiculo = DTDetalleVehiculo(vehiculo->getMatricula(),vehiculo->getCapacidad(),vehiculo->getMarca(),vehiculo->getModelo(),vehiculo->getTipo());
-    }
+DTDetalleViaje Viaje::getDetalle() {
+    DTDetalleVehiculo detalleVehiculo(
+        vehiculo->getMatricula(),
+        vehiculo->getCapacidad(),
+        vehiculo->getMarca(),
+        vehiculo->getModelo(),
+        vehiculo->getTipo()
+    );
+
     std::vector<DTDetalleReserva> detallesReservas;
-    for (unsigned  i = 0; i < reservas.size(); i++) {
+
+    for (unsigned int i = 0; i < reservas.size(); i++) {
         detallesReservas.push_back(reservas[i]->getDetalle());
     }
-    return DTDetalleViaje(codigo, fecha, origen, destino, asientosPublicados, precio, detalleVehiculo, detallesReservas);
+
+    return DTDetalleViaje(
+        codigo,
+        fecha,
+        origen,
+        destino,
+        asientosPublicados,
+        precio,
+        detalleVehiculo,
+        detallesReservas
+    );
 }

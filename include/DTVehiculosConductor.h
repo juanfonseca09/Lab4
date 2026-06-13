@@ -1,17 +1,21 @@
 #ifndef DT_VEHICULOS_CONDUCTOR_H
 #define DT_VEHICULOS_CONDUCTOR_H
 
-#include <vector>
-#include "DTDetalleVehiculo.h"
+#include <string>
 
 class DTVehiculosConductor {
 private:
-    std::vector<DTDetalleVehiculo> vehiculos;
+    std::string matricula;
+    std::string marca;
+    int capacidad;
 
 public:
-    DTVehiculosConductor(std::vector<DTDetalleVehiculo> vehiculos);
+    DTVehiculosConductor();
+    DTVehiculosConductor(std::string matricula, std::string marca, int capacidad);
 
-    std::vector<DTDetalleVehiculo> getVehiculos();
+    std::string getMatricula() const;
+    std::string getMarca() const;
+    int getCapacidad() const;
 };
 
 #endif

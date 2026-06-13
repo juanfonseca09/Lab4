@@ -1,64 +1,76 @@
 #include "../include/Vehiculo.h"
 #include "../include/Viaje.h"
 
-Vehiculo::Vehiculo(std::string matricula, int capacidad, std::string marca, std::string modelo, TipoVehiculo tipo, Conductor* c) {
+Vehiculo::Vehiculo(std::string matricula, int capacidad, std::string marca, std::string modelo, TipoVehiculo tipo) {
     this->matricula = matricula;
     this->capacidad = capacidad;
     this->marca = marca;
     this->modelo = modelo;
     this->tipo = tipo;
-    this->conductor = c;
+    this->conductor = NULL;
 }
 
 Vehiculo::~Vehiculo() {
 }
 
-std::string Vehiculo::getMatricula() const {
+std::string Vehiculo::getMatricula() {
     return matricula;
 }
 
-int Vehiculo::getCapacidad() const {
+int Vehiculo::getCapacidad() {
     return capacidad;
 }
 
-std::string Vehiculo::getMarca() const {
+std::string Vehiculo::getMarca() {
     return marca;
 }
 
-std::string Vehiculo::getModelo() const {
+std::string Vehiculo::getModelo() {
     return modelo;
 }
 
-TipoVehiculo Vehiculo::getTipo() const {
+TipoVehiculo Vehiculo::getTipo() {
     return tipo;
 }
 
-Conductor* Vehiculo::getConductor() const {
+void Vehiculo::setConductor(Conductor* conductor) {
+    this->conductor = conductor;
+}
+
+Conductor* Vehiculo::getConductor() {
     return conductor;
 }
 
 void Vehiculo::agregarViaje(Viaje* viaje) {
-    if (viaje != NULL)
+    if (viaje != NULL) {
         viajes.push_back(viaje);
-}
-
-std::vector<Viaje*> Vehiculo::getViajes() const {
-    return viajes;
-}
-
-bool Vehiculo::hayViajeFecha(DTFecha fecha) const {
-    for (unsigned  i = 0; i < viajes.size(); i++) {
-        if (viajes[i]->getFecha() == fecha)
-            return true;
     }
-    return false;
 }
 
 void Vehiculo::eliminarViaje(int codigo) {
-    for (unsigned  i = 0; i < viajes.size(); i++) {
-        if (viajes[i]->getCodigo() == codigo) {
-            viajes.erase(viajes.begin() + i);
-            return;
+    std::vector<Viaje*> nuevosViajes;
+
+    for (unsigned int i = 0; i < viajes.size(); i++) {
+        if (viajes[i] != NULL && viajes[i]->getCodigo() == codigo) {
+            continue;
+        }
+
+        nuevosViajes.push_back(viajes[i]);
+    }
+
+    viajes = nuevosViajes;
+}
+
+std::vector<Viaje*> Vehiculo::getViajes() {
+    return viajes;
+}
+
+bool Vehiculo::hayViajeFecha(DTFecha fecha) {
+    for (unsigned int i = 0; i < viajes.size(); i++) {
+        if (viajes[i] != NULL && viajes[i]->getFecha() == fecha) {
+            return true;
         }
     }
+
+    return false;
 }

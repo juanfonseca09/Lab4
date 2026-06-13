@@ -10,27 +10,32 @@ Reserva::Reserva(int asientosReservados, DTFecha fecha, Pasajero* pasajero, Viaj
 }
 
 Reserva::~Reserva() {
-    for (unsigned  i = 0; i < calificaciones.size(); i++) {
+    for (unsigned int i = 0; i < calificaciones.size(); i++) {
         delete calificaciones[i];
     }
 }
 
-int Reserva::getAsientosReservados() const {
+int Reserva::getAsientosReservados() {
     return asientosReservados;
 }
 
-DTFecha Reserva::getFecha() const {
+DTFecha Reserva::getFecha() {
     return fecha;
 }
 
-Pasajero* Reserva::getPasajero() const {
+Pasajero* Reserva::getPasajero() {
     return pasajero;
 }
 
-bool Reserva::perteneceAPasajero(std::string nickname) const {
+Viaje* Reserva::getViaje() {
+    return viaje;
+}
+
+bool Reserva::perteneceAPasajero(std::string nickname) {
     if (pasajero == NULL) {
         return false;
     }
+
     return pasajero->getNickname() == nickname;
 }
 
@@ -40,27 +45,26 @@ void Reserva::agregarCalificacion(Calificacion* calificacion) {
     }
 }
 
-std::vector<Calificacion*> Reserva::getCalificaciones() const {
+std::vector<Calificacion*> Reserva::getCalificaciones() {
     return calificaciones;
 }
 
-bool Reserva::tieneCalificacionDePara(std::string nicknameEvaluador, std::string nicknameEvaluado) const {
-    for (unsigned  i = 0; i < calificaciones.size(); i++) {
+bool Reserva::tieneCalificacionDePara(std::string nicknameEvaluador, std::string nicknameEvaluado) {
+    for (unsigned int i = 0; i < calificaciones.size(); i++) {
         if (calificaciones[i]->esDePara(nicknameEvaluador, nicknameEvaluado)) {
             return true;
         }
     }
+
     return false;
 }
 
-DTDetalleReserva Reserva::getDetalle() const {
+DTDetalleReserva Reserva::getDetalle() {
     std::string nicknamePasajero = "";
+
     if (pasajero != NULL) {
         nicknamePasajero = pasajero->getNickname();
     }
-    return DTDetalleReserva(asientosReservados, fecha, nicknamePasajero);
-}
 
-Viaje* Reserva::getViaje() const {
-    return viaje;
+    return DTDetalleReserva(asientosReservados, fecha, nicknamePasajero);
 }

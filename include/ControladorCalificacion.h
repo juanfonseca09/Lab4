@@ -12,16 +12,30 @@
 class ControladorCalificacion : public IControladorCalificacion {
 private:
     static ControladorCalificacion* instancia;
-    // guardamos el nickname del usuario y codigo de viaje seleccionados en pasos anteriores del caso de uso
+
     std::string nicknameRecordado;
     int codigoRecordado;
+
     ControladorCalificacion();
+
 public:
     static ControladorCalificacion* getInstance();
+
     std::vector<DTUsuario> listarUsuarios();
-    std::vector<DTListarViaje> listarViajes(std::string nickname);
-    std::vector<DTUsuarioViaje> listarUsuariosViaje(int codigo);
-    bool calificarUsuario(std::string nicknameCalificado, int puntaje);
+
+    std::vector<DTListarViaje> listarViajes(
+        std::string nickname
+    );
+
+    std::vector<DTUsuarioViaje> listarUsuariosViaje(
+        int codigo
+    );
+
+    bool calificarUsuario(
+        std::string nicknameCalificado,
+        int puntaje
+    );
+
     void recordarCodigoViaje(int codigo);
     void recordarUsuarioCalificador(std::string nickname);
 };

@@ -7,8 +7,8 @@
 #include <string>
 #include <vector>
 
-class Viaje;
 class Conductor;
+class Viaje;
 
 class Vehiculo {
 private:
@@ -17,21 +17,28 @@ private:
     std::string marca;
     std::string modelo;
     TipoVehiculo tipo;
-    std::vector<Viaje*> viajes;
+
     Conductor* conductor;
+    std::vector<Viaje*> viajes;
+
 public:
-    Vehiculo(std::string matricula, int capacidad, std::string marca, std::string modelo, TipoVehiculo tipo, Conductor* conductor);
-    virtual ~Vehiculo();
-    std::string getMatricula() const;
-    Conductor* getConductor() const;
-    int getCapacidad() const;
-    std::string getMarca() const;
-    std::string getModelo() const;
-    TipoVehiculo getTipo() const;
+    Vehiculo(std::string matricula, int capacidad, std::string marca, std::string modelo, TipoVehiculo tipo);
+    ~Vehiculo();
+
+    std::string getMatricula();
+    int getCapacidad();
+    std::string getMarca();
+    std::string getModelo();
+    TipoVehiculo getTipo();
+
+    void setConductor(Conductor* conductor);
+    Conductor* getConductor();
+
     void agregarViaje(Viaje* viaje);
-    std::vector<Viaje*> getViajes() const;
-    bool hayViajeFecha(DTFecha fecha) const;
     void eliminarViaje(int codigo);
+    std::vector<Viaje*> getViajes();
+
+    bool hayViajeFecha(DTFecha fecha);
 };
 
 #endif

@@ -4,28 +4,31 @@
 #include "Usuario.h"
 #include "TipoLibreta.h"
 #include "TipoVehiculo.h"
+#include "Vehiculo.h"
 
 #include <set>
 #include <vector>
 #include <string>
 
-class Vehiculo;
-
 class Conductor : public Usuario {
 private:
     std::set<TipoLibreta> libretas;
-    // set evita duplicados del tipo 
     std::vector<Vehiculo*> vehiculos;
+
 public:
     Conductor(std::string nickname, std::string nombre, std::string contrasena, std::string email, std::set<TipoLibreta> libs);
-    ~Conductor();
-    std::set<TipoLibreta> getLibretas() const;
-    bool tieneLibreta(TipoLibreta libreta) const;
-    bool puedeConducir(TipoVehiculo tipoVehiculo) const;
+    virtual ~Conductor();
+
+    std::set<TipoLibreta> getLibretas();
+
+    bool tieneLibreta(TipoLibreta libreta);
+    bool puedeConducir(TipoVehiculo tipoVehiculo);
+
     bool agregarVehiculo(Vehiculo* vehiculo);
-    Vehiculo* buscarVehiculo(std::string matricula) const;
-    bool tieneVehiculo(std::string matricula) const;
-    std::vector<Vehiculo*> getVehiculos() const;
+    Vehiculo* buscarVehiculo(std::string matricula);
+    bool tieneVehiculo(std::string matricula);
+
+    std::vector<Vehiculo*> getVehiculos();
 };
 
 #endif

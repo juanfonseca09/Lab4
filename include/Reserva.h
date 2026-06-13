@@ -8,28 +8,37 @@
 #include <string>
 
 class Pasajero;
-class Calificacion;
 class Viaje;
+class Calificacion;
 
 class Reserva {
 private:
     int asientosReservados;
     DTFecha fecha;
+
     Pasajero* pasajero;
     Viaje* viaje;
+
     std::vector<Calificacion*> calificaciones;
+
 public:
     Reserva(int asientosReservados, DTFecha fecha, Pasajero* pasajero, Viaje* viaje);
-    virtual ~Reserva();
-    int getAsientosReservados() const;
-    DTFecha getFecha() const;
-    Pasajero* getPasajero() const;
-    Viaje* getViaje() const;
-    bool perteneceAPasajero(std::string nickname) const;
+    ~Reserva();
+
+    int getAsientosReservados();
+    DTFecha getFecha();
+
+    Pasajero* getPasajero();
+    Viaje* getViaje();
+
+    bool perteneceAPasajero(std::string nickname);
+
     void agregarCalificacion(Calificacion* calificacion);
-    std::vector<Calificacion*> getCalificaciones() const;
-    bool tieneCalificacionDePara(std::string nicknameEvaluador, std::string nicknameEvaluado) const;
-    DTDetalleReserva getDetalle() const;
+    std::vector<Calificacion*> getCalificaciones();
+
+    bool tieneCalificacionDePara(std::string nicknameEvaluador, std::string nicknameEvaluado);
+
+    DTDetalleReserva getDetalle();
 };
 
 #endif

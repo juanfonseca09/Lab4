@@ -1,7 +1,5 @@
 #include "../include/Calificacion.h"
 #include "../include/Usuario.h"
-#include "../include/Reserva.h"
-
 
 Calificacion::Calificacion(DTFecha fecha, int puntaje, Usuario* evaluador, Usuario* evaluado, Reserva* reserva) {
     this->fecha = fecha;
@@ -14,29 +12,31 @@ Calificacion::Calificacion(DTFecha fecha, int puntaje, Usuario* evaluador, Usuar
 Calificacion::~Calificacion() {
 }
 
-DTFecha Calificacion::getFecha() const {
+DTFecha Calificacion::getFecha() {
     return fecha;
 }
 
-int Calificacion::getPuntaje() const {
+int Calificacion::getPuntaje() {
     return puntaje;
 }
 
-Usuario* Calificacion::getEvaluador() const {
+Usuario* Calificacion::getEvaluador() {
     return evaluador;
 }
 
-Usuario* Calificacion::getEvaluado() const {
+Usuario* Calificacion::getEvaluado() {
     return evaluado;
 }
 
-Reserva* Calificacion::getReserva() const {
+Reserva* Calificacion::getReserva() {
     return reserva;
 }
 
-bool Calificacion::esDePara(std::string nicknameEvaluador, std::string nicknameEvaluado) const {
+bool Calificacion::esDePara(std::string nicknameEvaluador, std::string nicknameEvaluado) {
     if (evaluador == NULL || evaluado == NULL) {
         return false;
     }
-    return evaluador->getNickname() == nicknameEvaluador && evaluado->getNickname() == nicknameEvaluado;
+
+    return evaluador->getNickname() == nicknameEvaluador &&
+           evaluado->getNickname() == nicknameEvaluado;
 }

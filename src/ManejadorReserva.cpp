@@ -1,31 +1,39 @@
 #include "../include/ManejadorReserva.h"
-#include "../include/Reserva.h"
+#include "../include/Viaje.h"
 
-ManejadorReserva* ManejadorReserva::instancia = 0;
+ManejadorReserva* ManejadorReserva::instancia = NULL;
 
 ManejadorReserva::ManejadorReserva() {
 }
 
-ManejadorReserva::~ManejadorReserva() {
-    while (!reservas.empty())
-    {
-        Reserva* a_borrar = reservas.back();
-        reservas.pop_back();
-        delete a_borrar;
-    }
-}
-
 ManejadorReserva* ManejadorReserva::getInstance() {
-    if (instancia == 0)
+    if (instancia == NULL) {
         instancia = new ManejadorReserva();
+    }
+
     return instancia;
 }
 
-void ManejadorReserva::agregarReserva(Reserva* r) {
-    if (r != 0)
-        reservas.push_back(r);
+void ManejadorReserva::agregarReserva(Reserva* reserva) {
+    if (reserva != NULL) {
+        reservas.push_back(reserva);
+    }
 }
 
 std::vector<Reserva*> ManejadorReserva::getReservas() {
     return reservas;
+}
+
+void ManejadorReserva::eliminarReferenciasReservasDeViaje(Viaje* viaje) {
+    std::vector<Reserva*> nuevasReservas;
+
+    for (unsigned int i = 0; i < reservas.size(); i++) {
+        if (reservas[i] != NULL && reservas[i]->getViaje() == viaje) {
+            continue;
+        }
+
+        nuevasReservas.push_back(reservas[i]);
+    }
+
+    reservas = nuevasReservas;
 }
