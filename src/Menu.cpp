@@ -39,24 +39,33 @@ void Menu::altaUsuario() {
         usuarioOk = ctrlUsuario->altaPasajero(nickname, nombre, contrasena, email, ci);
     } else if (tipoUsuario == 2) {
         std::set<TipoLibreta> libretas;
-        std::cout << "\n=== Registrar Libretas ===\n";
-        std::cout << "Indique cuales libretas posee (1: Si, 0: No)\n";
-        
-        int tieneMotoAm, tieneMotoProf, tieneAutoAm, tieneAutoProf;
-        
-        std::cout << "¿Posee libreta Moto Amateur? (1: Si, 0: No): "; std::cin >> tieneMotoAm;
-        if (tieneMotoAm == 1) libretas.insert(MotoAmateur);
-        
-        std::cout << "¿Posee libreta Moto Profesional? (1: Si, 0: No): "; std::cin >> tieneMotoProf;
-        if (tieneMotoProf == 1) libretas.insert(MotoProfesional);
-        
-        std::cout << "¿Posee libreta Auto Amateur? (1: Si, 0: No): "; std::cin >> tieneAutoAm;
-        if (tieneAutoAm == 1) libretas.insert(AutoAmateur);
-        
-        std::cout << "¿Posee libreta Auto Profesional? (1: Si, 0: No): "; std::cin >> tieneAutoProf;
-        if (tieneAutoProf == 1) libretas.insert(AutoProfesional);
-        
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "\n=== Registrar Libreta ===\n";
+        int opcionLibreta = -1;
+        int agregarOtra = 0;
+        do {
+            std::cout << "0. Moto (Profesional)\n";
+            std::cout << "1. Moto (Amateur)\n";
+            std::cout << "2. Auto (Profesional)\n";
+            std::cout << "3. Auto (Amateur)\n";
+            std::cout << "Seleccione el tipo de libreta: "; std::cin >> opcionLibreta;
+            if (opcionLibreta == 0) {
+                libretas.insert(MotoProfesional);
+                std::cout << "Libreta agregada.\n";
+            } else if (opcionLibreta == 1) {
+                libretas.insert(MotoAmateur);
+                std::cout << "Libreta agregada.\n";
+            } else if (opcionLibreta == 2) {
+                libretas.insert(AutoProfesional);
+                std::cout << "Libreta agregada.\n";
+            } else if (opcionLibreta == 3) {
+                libretas.insert(AutoAmateur);
+                std::cout << "Libreta agregada.\n";
+            } else {
+                std::cout << "Opcion invalida.\n";
+            }
+            std::cout << "¿Desea agregar otra libreta? (1: Si, 0: No): "; std::cin >> agregarOtra;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        } while (agregarOtra == 1);
 
         usuarioOk = ctrlUsuario->altaConductor(nickname, nombre, contrasena, email, libretas);
         int agregarVehiculo = 1;
@@ -193,20 +202,14 @@ void Menu::generarReserva() {
     std::vector<DTConsultaViaje> viajes = ctrlReserva->consultarViajes(DTFecha(dia, mes, anio), origen, destino, asientos);
     //TODO: Recorrer la coleccion y mostrar: "> Codigo: xx, Marca: yy, Modelo: zzz, Conductor: aaa, CalificacionPromedio: qqq, PrecioTotal: eee"
 
-    for (size_t i = 0; i < viajes.size(); ++i) { 
+    for (size_t i = 0; i < viajes.size(); ++i) {
         DTConsultaViaje cv = viajes[i];
-            std::cout << "> Codigo: " << cv.getCodigo()
-                      << ", Marca: " << cv.getMarca()
-                      << ", Modelo: " << cv.getModelo()
-                      << ", Conductor: " << cv.getConductor()
-                      << ", CalificacionPromedio: " << cv.getCalificacionProm()
-                      << ", CalificacionPromedio: " << cv.getPrecioTotal() << "\n";
-    }
-
-    bool hayViajes = viajes.empty();
-    if (!hayViajes) {
-        std::cout << "No hay viajes disponibles.\n";
-        return;
+        std::cout << "> Codigo: " << cv.getCodigo()
+                  << ", Marca: " << cv.getMarca()
+                  << ", Modelo: " << cv.getModelo()
+                  << ", Conductor: " << cv.getConductor()
+                  << ", CalificacionPromedio: " << cv.getCalificacionProm()
+                  << ", PrecioTotal: " << cv.getPrecioTotal() << "\n";
     }
 
     int codigo;
@@ -264,7 +267,6 @@ void Menu::calificarUsuario() {
         std::cout << "Nickname invalido.\n";
         return;
     }
-
     std::vector<DTListarViaje> viajes = ctrlCalificacion->listarViajes(nickname);
     //TODO: Recorrer la coleccion y mostrar "> Codigo: xx, Fecha: dd/mm/aaaa, Origen: zzz, Destino: www, Conductor: aaa"
     for (size_t i = 0; i < viajes.size(); i++){
@@ -272,7 +274,7 @@ void Menu::calificarUsuario() {
                   << ", Fecha:" << viajes[i].getFecha()
                   << ", Origen:" << viajes[i].getOrigen()
                   << ", Destino:" << viajes[i].getDestino()
-                  << ", Conductor:" << viajes[i].getFecha() << '\n';    
+                  << ", Conductor:" << viajes[i].getConductor() << '\n';
     }
 
     int codigo;
@@ -291,13 +293,16 @@ void Menu::calificarUsuario() {
         std::cout << "Codigo invalido.\n";
         return;
     }
-
     std::vector<DTUsuarioViaje> usuariosviaje = ctrlCalificacion->listarUsuariosViaje(codigo);
     //TODO: Recorrer la coleccion y mostrar "> Nickname: xx, Tipo: yyy"
     for (size_t i = 0; i < usuariosviaje.size(); i++) {
             std::cout << "> Nickname: " << usuariosviaje[i].getNickname()
-                      << ", Nombre: " << usuariosviaje[i].getTipo() << "\n";
-        
+                      << ", Tipo: ";
+            if (usuariosviaje[i].getTipo() == UsuarioPasajero)
+                std::cout << "Pasajero";
+            else
+                std::cout << "Conductor";
+            std::cout << "\n";
     }
     std::string nicknameCalificado;
     int calificacion;

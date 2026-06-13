@@ -8,6 +8,9 @@
 #include "../include/Vehiculo.h"
 #include "../include/Conductor.h"
 #include <map>
+#include "../include/ManejadorCalificacion.h"
+#include "../include/Calificacion.h"
+#include "../include/ControladorFechaActual.h"
 
 ControladorCalificacion* ControladorCalificacion::instancia = NULL;
 
@@ -69,6 +72,66 @@ std::vector<DTUsuarioViaje> ControladorCalificacion::listarUsuariosViaje(int cod
     return resultado;
 }
 
-bool ControladorCalificacion::calificarUsuario(std::string, int) {
-    return false;
+bool ControladorCalificacion::calificarUsuario(std::string nicknameCalificado, int puntaje) {
+    if (codigoRecordado == -1 || nicknameRecordado == "")
+        return false;
+
+    ManejadorCalificacion* mc = ManejadorCalificacion::getInstance();
+    ManejadorUsuario* mu = ManejadorUsuario::getInstance();
+    ManejadorViaje* mv = ManejadorViaje::getInstance();
+
+    Usuario* evaluador = mu->find(nicknameRecordado);
+    Usuario* evaluado = mu->find(nicknameCalificado);
+    if (evaluador == NULL || evaluado == NULL)
+        return false;
+
+    Viaje* viaje = mv->find(codigoRecordado);
+    if (viaje == NULL)
+        return false;
+
+    std::vector<Calificacion*> existentes = mc->getCalificaciones();
+    for (size_t i = 0; i < existentes.size(); ++i) {
+        Calificacion* c = existentes[i];
+        if (c == NULL) continue;
+        if (c->esDePara(nicknameRecordado, nicknameCalificado)) {
+            Reserva* r = c->getReserva();
+            if (r != NULL && r->getViaje() != NULL && r->getViaje()->getCodigo() == codigoRecordado)
+                return false;
+        }
+    }
+
+    Reserva* reservaVinculada = NULL;
+    Pasajero* pasajeroEvaluador = dynamic_cast<Pasajero*>(evaluador);
+    if (pasajeroEvaluador != NULL) {
+        std::vector<Reserva*> reservas = pasajeroEvaluador->getReservas();
+        for (size_t i = 0; i < reservas.size(); ++i) {
+            if (reservas[i] != NULL && reservas[i]->getViaje() != NULL && reservas[i]->getViaje()->getCodigo() == codigoRecordado) {
+                reservaVinculada = reservas[i];
+                break;
+            }
+        }
+    } else {
+        reservaVinculada = viaje->buscarReservaDePasajero(nicknameCalificado);
+    }
+
+    DTFecha fechaActual = ControladorFechaActual::getInstance()->getFecha();
+    Calificacion* nueva = new Calificacion(fechaActual, puntaje, evaluador, evaluado, reservaVinculada);
+
+    mc->agregarCalificacion(nueva);
+    evaluador->agregarCalificacionRealizada(nueva);
+    evaluado->agregarCalificacionRecibida(nueva);
+    if (reservaVinculada != NULL) {
+        reservaVinculada->agregarCalificacion(nueva);
+    }
+
+    return true;
+}
+
+// Para cargarDatos
+void ControladorCalificacion::recordarCodigoViaje(int codigo) {
+    codigoRecordado = codigo;
+}
+
+void ControladorCalificacion::recordarUsuarioCalificador(std::string nickname) {
+    nicknameRecordado = nickname;
 }
